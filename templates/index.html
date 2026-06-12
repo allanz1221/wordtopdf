@@ -336,7 +336,15 @@ async function uploadFile(file) {
         if (data.keywords_es) document.getElementById('keywords_es').value = data.keywords_es;
 
         tryExtractAuthors(data.texto);
-        tryExtractReferences(data.texto);
+        if (data.references && data.references.length > 0) {
+            for (const ref of data.references) {
+                addReference(ref);
+            }
+        } else {
+            tryExtractReferences(data.texto);
+        }
+
+        window.originalFileName = data.original_name || 'articulo';
 
         document.getElementById('upload-section').classList.add('hidden');
         document.getElementById('metadata-section').classList.remove('hidden');
@@ -499,6 +507,7 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
 
         document.getElementById('xmlPreview').textContent = xmlText;
         document.getElementById('downloadBtn').href = downloadUrl;
+        document.getElementById('downloadBtn').download = (window.originalFileName || 'articulo') + '.xml';
         document.getElementById('metadata-section').classList.add('hidden');
         document.getElementById('result-section').style.display = 'block';
         document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });

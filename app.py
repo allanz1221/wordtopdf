@@ -66,6 +66,54 @@ def guess_sections(text):
         i += 2
     return sections
 
+def guess_references(text):
+    refs = []
+    ref_markers = [
+        r'(?:^|\n)\s*(?:referencias|bibliograf[íi]a|references|bibliography)\s*[\:\n]',
+        r'(?:^|\n)\s*(?:referencias|bibliograf[íi]a|references|bibliography)\s*$'
+    ]
+    ref_section = ""
+    for marker in ref_markers:
+        m = re.search(marker, text, re.IGNORECASE)
+        if m:
+            ref_section = text[m.end():]
+            break
+
+    if not ref_section or len(ref_section) < 20:
+        return refs
+
+    ref_section = ref_section.strip()
+    lines = ref_section.split('\n')
+    buffer = ""
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        starts_with_num = re.match(r'^\[?\d+[\].]?\s+', line)
+        starts_with_ref = re.match(r'^[A-Z][A-Za-zÁÉÍÓÚÑáéíóúñ]+[,]?\s', line)
+        if starts_with_num or (starts_with_ref and buffer and len(buffer) > 30):
+            if buffer and len(buffer) > 30:
+                refs.append(buffer.strip())
+            buffer = line
+        else:
+            if buffer:
+                buffer += " " + line
+            else:
+                buffer = line
+
+    if buffer and len(buffer) > 30:
+        refs.append(buffer.strip())
+
+    seen = set()
+    unique = []
+    for r in refs:
+        r_clean = re.sub(r'^\[?\d+[\].]?\s*', '', r).strip()[:80]
+        if r_clean and r_clean not in seen:
+            seen.add(r_clean)
+            unique.append(r)
+
+    return unique[:20]
+
 def guess_authors(text):
     lines = text.strip().split('\n')
     for i, line in enumerate(lines[:30]):
@@ -413,16 +461,28 @@ def upload():
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(filepath)
 
-    if ext == '.pdf':
-        texto = extract_text_from_pdf(filepath)
-    else:
-        texto = extract_text_from_docx(filepath)
+    try:
+        if ext == '.pdf':
+            texto = extract_text_from_pdf(filepath)
+        else:
+            texto = extract_text_from_docx(filepath)
+    except Exception as e:
+        os.remove(filepath)
+        return jsonify({'error': f'Error al leer el archivo: {str(e)}'}), 400
+
+    if not texto.strip():
+        os.remove(filepath)
+        return jsonify({'error': 'No se pudo extraer texto del archivo. Verifica que no esté dañado o protegido.'}), 400
+
     title = guess_title(texto)
     abstract = guess_abstract(texto)
     keywords = guess_keywords(texto, 'es')
+    refs = guess_references(texto)
 
     lines = texto.strip().split('\n')
     total_lines = len(lines)
+
+    original_name = os.path.splitext(os.path.basename(file.filename))[0]
 
     return jsonify({
         'file_id': file_id,
@@ -430,19 +490,24 @@ def upload():
         'title_es': title,
         'abstract_es': abstract,
         'keywords_es': ', '.join(keywords),
+        'references': refs,
+        'original_name': original_name,
         'total_lines': total_lines
     })
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    data = request.form.to_dict()
-    xml = generate_jats_xml(data)
-    file_id = data.get('file_id', 'result')
-    output_filename = f'{file_id}.xml'
-    output_path = os.path.join(app.config['UPLOAD_FOLDER'], output_filename)
-    with open(output_path, 'w', encoding='utf-8') as f:
-        f.write(xml)
-    return jsonify({'download_url': url_for('download', filename=output_filename)})
+    try:
+        data = request.form.to_dict()
+        xml = generate_jats_xml(data)
+        file_id = data.get('file_id', 'result')
+        output_filename = f'{file_id}.xml'
+        output_path = os.path.join(app.config['UPLOAD_FOLDER'], output_filename)
+        with open(output_path, 'w', encoding='utf-8') as f:
+            f.write(xml)
+        return jsonify({'download_url': url_for('download', filename=output_filename)})
+    except Exception as e:
+        return jsonify({'error': f'Error al generar XML: {str(e)}'}), 500
 
 @app.route('/download/<filename>')
 def download(filename):
@@ -450,6 +515,14 @@ def download(filename):
     if not os.path.exists(filepath):
         return 'Archivo no encontrado', 404
     return send_file(filepath, as_attachment=True, download_name=os.path.splitext(os.path.basename(filename))[0] + '.xml')
+
+@app.errorhandler(413)
+def too_large(e):
+    return jsonify({'error': 'El archivo es demasiado grande. Máximo 50 MB.'}), 413
+
+@app.errorhandler(500)
+def server_error(e):
+    return jsonify({'error': 'Error interno del servidor. Intenta de nuevo.'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
