@@ -505,12 +505,15 @@ def generate():
         data = request.form.to_dict()
         xml = generate_jats_xml(data)
         file_id = data.get('file_id', 'result')
+        original_name = data.get('original_name', 'articulo')
         output_filename = f'{file_id}.xml'
         ensure_upload_dir()
         output_path = os.path.join(UPLOAD_FOLDER, output_filename)
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(xml)
-        return jsonify({'download_url': url_for('download', filename=output_filename)})
+        from urllib.parse import quote
+        download_url = url_for('download', filename=output_filename) + '?name=' + quote(original_name + '.xml')
+        return jsonify({'download_url': download_url})
     except Exception as e:
         return jsonify({'error': f'Error al generar XML: {str(e)}'}), 500
 
@@ -519,7 +522,8 @@ def download(filename):
     filepath = os.path.join(UPLOAD_FOLDER, filename)
     if not os.path.exists(filepath):
         return 'Archivo no encontrado', 404
-    return send_file(filepath, as_attachment=True, download_name=os.path.splitext(os.path.basename(filename))[0] + '.xml')
+    dl_name = request.args.get('name') or os.path.splitext(os.path.basename(filename))[0] + '.xml'
+    return send_file(filepath, as_attachment=True, download_name=dl_name)
 
 @app.errorhandler(413)
 def too_large(e):

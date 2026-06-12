@@ -105,6 +105,7 @@ h1 { text-align: center; color: #1a1a2e; margin-bottom: 10px; font-size: 28px; }
 
     <form id="mainForm" method="POST" action="/generate">
         <input type="hidden" name="file_id" id="file_id">
+        <input type="hidden" name="original_name" id="original_name">
 
         <div id="metadata-section" class="card hidden">
             <h2>2. Metadatos del artículo</h2>
@@ -330,6 +331,7 @@ async function uploadFile(file) {
         }
 
         document.getElementById('file_id').value = data.file_id;
+        document.getElementById('original_name').value = data.original_name || 'articulo';
         document.getElementById('body_text').value = data.texto;
         document.getElementById('title_es').value = data.title_es;
         if (data.abstract_es) document.getElementById('abstract_es').value = data.abstract_es;
