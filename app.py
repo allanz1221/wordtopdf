@@ -3,6 +3,7 @@ import uuid
 import re
 from flask import Flask, render_template, request, send_file, jsonify, url_for
 import fitz
+import docx
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -17,6 +18,11 @@ def extract_text_from_pdf(pdf_path):
     for page in doc:
         text += page.get_text()
     doc.close()
+    return text
+
+def extract_text_from_docx(docx_path):
+    doc = docx.Document(docx_path)
+    text = "\n".join(p.text for p in doc.paragraphs)
     return text
 
 def guess_title(text):
@@ -398,15 +404,19 @@ def upload():
     file = request.files['file']
     if file.filename == '':
         return jsonify({'error': 'No se seleccionó ningún archivo'}), 400
-    if not file.filename.lower().endswith('.pdf'):
-        return jsonify({'error': 'El archivo debe ser PDF'}), 400
+    ext = os.path.splitext(file.filename.lower())[1]
+    if ext not in ('.pdf', '.docx'):
+        return jsonify({'error': 'El archivo debe ser PDF o DOCX'}), 400
 
     file_id = str(uuid.uuid4())
-    filename = f'{file_id}.pdf'
+    filename = f'{file_id}{ext}'
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(filepath)
 
-    texto = extract_text_from_pdf(filepath)
+    if ext == '.pdf':
+        texto = extract_text_from_pdf(filepath)
+    else:
+        texto = extract_text_from_docx(filepath)
     title = guess_title(texto)
     abstract = guess_abstract(texto)
     keywords = guess_keywords(texto, 'es')
@@ -439,7 +449,7 @@ def download(filename):
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     if not os.path.exists(filepath):
         return 'Archivo no encontrado', 404
-    return send_file(filepath, as_attachment=True, download_name=filename.replace('.pdf.xml', '.xml').replace('uploads/', ''))
+    return send_file(filepath, as_attachment=True, download_name=os.path.splitext(os.path.basename(filename))[0] + '.xml')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PDF a XML - JATS Generator</title>
+<title>PDF/DOCX a XML - JATS Generator</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; color: #333; line-height: 1.6; }
@@ -89,16 +89,16 @@ h1 { text-align: center; color: #1a1a2e; margin-bottom: 10px; font-size: 28px; }
 </div>
 
 <div class="container">
-    <h1>📄 PDF a XML (JATS)</h1>
-    <p class="subtitle">Convierte archivos PDF a formato XML JATS para artículos académicos</p>
+    <h1>📄 PDF/DOCX a XML (JATS)</h1>
+    <p class="subtitle">Convierte archivos PDF y DOCX a formato XML JATS para artículos académicos</p>
 
     <div id="upload-section" class="card">
-        <h2>1. Subir archivo PDF</h2>
+        <h2>1. Subir archivo PDF o DOCX</h2>
         <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
             <div class="upload-icon">📎</div>
-            <div class="upload-text">Haz clic o arrastra un PDF aquí</div>
-            <div class="upload-hint">Solo archivos PDF (máx. 50 MB)</div>
-            <input type="file" id="fileInput" accept=".pdf">
+            <div class="upload-text">Haz clic o arrastra un PDF o DOCX aquí</div>
+            <div class="upload-hint">Archivos PDF o DOCX (máx. 50 MB)</div>
+            <input type="file" id="fileInput" accept=".pdf,.docx">
         </div>
         <div id="upload-status" class="mt-10"></div>
     </div>
@@ -111,7 +111,7 @@ h1 { text-align: center; color: #1a1a2e; margin-bottom: 10px; font-size: 28px; }
 
             <div class="mb-10">
                 <span class="section-toggle active" onclick="toggleSection(this, 'texto-section')">
-                    <span>📝 Texto extraído del PDF</span>
+                    <span>📝 Texto extraído del archivo</span>
                     <span class="arrow">▼</span>
                 </span>
                 <div id="texto-section" class="section-content show">
@@ -308,15 +308,16 @@ function hideLoading() {
 }
 
 async function uploadFile(file) {
-    if (!file.name.toLowerCase().endsWith('.pdf')) {
-        document.getElementById('upload-status').innerHTML = '<div class="alert alert-error">Solo se permiten archivos PDF.</div>';
+    const name = file.name.toLowerCase();
+    if (!name.endsWith('.pdf') && !name.endsWith('.docx')) {
+        document.getElementById('upload-status').innerHTML = '<div class="alert alert-error">Solo se permiten archivos PDF o DOCX.</div>';
         return;
     }
 
     const formData = new FormData();
     formData.append('file', file);
 
-    showLoading('Extrayendo texto del PDF...');
+    showLoading('Extrayendo texto...');
 
     try {
         const resp = await fetch('/upload', { method: 'POST', body: formData });
