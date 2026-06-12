@@ -486,7 +486,9 @@ def upload():
     lines = texto.strip().split('\n')
     total_lines = len(lines)
 
-    original_name = os.path.splitext(os.path.basename(file.filename))[0]
+    base = os.path.splitext(os.path.basename(file.filename))[0]
+    m = re.match(r'^(\d+)', base)
+    original_name = m.group(1) if m else base
 
     return jsonify({
         'file_id': file_id,
