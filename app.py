@@ -1,16 +1,19 @@
 import os
 import uuid
 import re
+import tempfile
 from flask import Flask, render_template, request, send_file, jsonify, url_for
 import fitz
 import docx
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
 app.secret_key = 'pdftoxml-secret-key'
 
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+UPLOAD_FOLDER = os.path.join(tempfile.gettempdir(), 'pdftoxml-uploads')
+
+def ensure_upload_dir():
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def extract_text_from_pdf(pdf_path):
     doc = fitz.open(pdf_path)
@@ -458,7 +461,8 @@ def upload():
 
     file_id = str(uuid.uuid4())
     filename = f'{file_id}{ext}'
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    ensure_upload_dir()
+    filepath = os.path.join(UPLOAD_FOLDER, filename)
     file.save(filepath)
 
     try:
@@ -502,7 +506,8 @@ def generate():
         xml = generate_jats_xml(data)
         file_id = data.get('file_id', 'result')
         output_filename = f'{file_id}.xml'
-        output_path = os.path.join(app.config['UPLOAD_FOLDER'], output_filename)
+        ensure_upload_dir()
+        output_path = os.path.join(UPLOAD_FOLDER, output_filename)
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(xml)
         return jsonify({'download_url': url_for('download', filename=output_filename)})
@@ -511,7 +516,7 @@ def generate():
 
 @app.route('/download/<filename>')
 def download(filename):
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    filepath = os.path.join(UPLOAD_FOLDER, filename)
     if not os.path.exists(filepath):
         return 'Archivo no encontrado', 404
     return send_file(filepath, as_attachment=True, download_name=os.path.splitext(os.path.basename(filename))[0] + '.xml')
