@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF a XML - JATS Generator</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; color: #333; line-height: 1.6; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+h1 { text-align: center; color: #1a1a2e; margin-bottom: 10px; font-size: 28px; }
+.subtitle { text-align: center; color: #666; margin-bottom: 30px; }
+
+.card { background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 30px; margin-bottom: 20px; }
+.card h2 { color: #1a1a2e; margin-bottom: 20px; font-size: 20px; border-bottom: 2px solid #e8e8e8; padding-bottom: 10px; }
+
+.upload-area { border: 3px dashed #ccc; border-radius: 12px; padding: 60px 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+.upload-area:hover { border-color: #4a6cf7; background: #f8f9ff; }
+.upload-area.dragover { border-color: #4a6cf7; background: #eef1ff; }
+.upload-area input[type="file"] { display: none; }
+.upload-icon { font-size: 48px; margin-bottom: 15px; }
+.upload-text { font-size: 18px; color: #555; margin-bottom: 8px; }
+.upload-hint { font-size: 14px; color: #999; }
+.btn { display: inline-block; padding: 12px 30px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; transition: all 0.3s; text-decoration: none; }
+.btn-primary { background: #4a6cf7; color: #fff; }
+.btn-primary:hover { background: #3a5ce5; }
+.btn-primary:disabled { background: #a0b0f0; cursor: not-allowed; }
+.btn-success { background: #28a745; color: #fff; }
+.btn-success:hover { background: #218838; }
+.btn-secondary { background: #6c757d; color: #fff; }
+.btn-secondary:hover { background: #5a6268; }
+
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-weight: 600; margin-bottom: 5px; color: #444; font-size: 14px; }
+.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; transition: border-color 0.3s; }
+.form-group input:focus, .form-group textarea:focus { outline: none; border-color: #4a6cf7; box-shadow: 0 0 0 3px rgba(74,108,247,0.1); }
+.form-group textarea { resize: vertical; min-height: 100px; font-family: 'Consolas', monospace; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+
+.section-toggle { background: #f8f9fa; border: 1px solid #e8e8e8; border-radius: 8px; padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.section-toggle:hover { background: #eef1ff; }
+.section-toggle .arrow { transition: transform 0.3s; }
+.section-toggle.active .arrow { transform: rotate(180deg); }
+.section-content { display: none; padding: 15px; background: #fafbfc; border: 1px solid #e8e8e8; border-radius: 8px; margin-bottom: 15px; }
+.section-content.show { display: block; }
+
+.spinner { display: none; width: 40px; height: 40px; border: 4px solid #e8e8e8; border-top: 4px solid #4a6cf7; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 20px auto; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.85); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
+.loading-overlay.show { display: flex; }
+.loading-text { margin-top: 15px; font-size: 16px; color: #555; }
+
+.alert { padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; }
+.alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+.alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+.hidden { display: none; }
+.text-center { text-align: center; }
+.mt-10 { margin-top: 10px; }
+.mt-20 { margin-top: 20px; }
+.mb-10 { margin-bottom: 10px; }
+.mb-20 { margin-bottom: 20px; }
+
+.xml-preview { background: #1e1e2e; color: #d4d4d4; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', 'Courier New', monospace; font-size: 13px; line-height: 1.5; max-height: 500px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; }
+.xml-preview .tag { color: #569cd6; }
+.xml-preview .attr { color: #9cdcfe; }
+.xml-preview .value { color: #ce9178; }
+.xml-preview .content { color: #d4d4d4; }
+
+.action-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+.action-buttons .btn { flex: 1; min-width: 150px; text-align: center; }
+
+.help-text { font-size: 12px; color: #888; margin-top: 3px; }
+.add-btn { background: #28a745; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; margin-bottom: 10px; }
+.add-btn:hover { background: #218838; }
+.remove-btn { background: #dc3545; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 8px; }
+.remove-btn:hover { background: #c82333; }
+.entry-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.entry-row input { flex: 1; }
+
+#result-section { display: none; }
+</style>
+</head>
+<body>
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Procesando...</div>
+</div>
+
+<div class="container">
+    <h1>📄 PDF a XML (JATS)</h1>
+    <p class="subtitle">Convierte archivos PDF a formato XML JATS para artículos académicos</p>
+
+    <div id="upload-section" class="card">
+        <h2>1. Subir archivo PDF</h2>
+        <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">📎</div>
+            <div class="upload-text">Haz clic o arrastra un PDF aquí</div>
+            <div class="upload-hint">Solo archivos PDF (máx. 50 MB)</div>
+            <input type="file" id="fileInput" accept=".pdf">
+        </div>
+        <div id="upload-status" class="mt-10"></div>
+    </div>
+
+    <form id="mainForm" method="POST" action="/generate">
+        <input type="hidden" name="file_id" id="file_id">
+
+        <div id="metadata-section" class="card hidden">
+            <h2>2. Metadatos del artículo</h2>
+
+            <div class="mb-10">
+                <span class="section-toggle active" onclick="toggleSection(this, 'texto-section')">
+                    <span>📝 Texto extraído del PDF</span>
+                    <span class="arrow">▼</span>
+                </span>
+                <div id="texto-section" class="section-content show">
+                    <p class="help-text mb-10">Texto extraído automáticamente. Puedes editarlo para corregir errores.</p>
+                    <textarea id="body_text" name="body" rows="15" style="font-family:Consolas,monospace;font-size:13px"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Título del artículo (español) *</label>
+                <input type="text" name="title_es" id="title_es" required>
+            </div>
+
+            <div class="form-group">
+                <label>Título del artículo (inglés)</label>
+                <input type="text" name="title_en" id="title_en">
+            </div>
+
+            <div class="form-group">
+                <label>DOI</label>
+                <input type="text" name="doi" id="doi" value="10.46589/riasf.v1i43.1">
+                <p class="help-text">Formato: 10.46589/riasf.v1i43.{id}</p>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ID del artículo</label>
+                    <input type="text" name="article_id" id="article_id" value="1">
+                </div>
+                <div class="form-group">
+                    <label>Elocation ID</label>
+                    <input type="text" name="elocation" id="elocation" value="e1">
+                </div>
+            </div>
+
+            <div class="form-row-3">
+                <div class="form-group">
+                    <label>Volumen</label>
+                    <input type="text" name="volume" value="1">
+                </div>
+                <div class="form-group">
+                    <label>Número</label>
+                    <input type="text" name="issue" value="43">
+                </div>
+                <div class="form-group">
+                    <label>Referencias</label>
+                    <input type="number" name="refs_count" id="refs_count" value="0" min="0">
+                </div>
+            </div>
+
+            <div class="section-toggle" onclick="toggleSection(this, 'dates-section')">
+                <span>📅 Fechas</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div id="dates-section" class="section-content">
+                <div class="form-row-3">
+                    <div class="form-group"><label>Recibido - Día</label><input type="text" name="rec_day" value="16"></div>
+                    <div class="form-group"><label>Recibido - Mes</label><input type="text" name="rec_month" value="03"></div>
+                    <div class="form-group"><label>Recibido - Año</label><input type="text" name="rec_year" value="2025"></div>
+                </div>
+                <div class="form-row-3">
+                    <div class="form-group"><label>Aceptado - Día</label><input type="text" name="acc_day" value="16"></div>
+                    <div class="form-group"><label>Aceptado - Mes</label><input type="text" name="acc_month" value="06"></div>
+                    <div class="form-group"><label>Aceptado - Año</label><input type="text" name="acc_year" value="2025"></div>
+                </div>
+                <div class="form-row-3">
+                    <div class="form-group"><label>Publicado - Día</label><input type="text" name="pub_day" value="30"></div>
+                    <div class="form-group"><label>Publicado - Mes</label><input type="text" name="pub_month" value="06"></div>
+                    <div class="form-group"><label>Publicado - Año</label><input type="text" name="pub_year" value="2025"></div>
+                </div>
+            </div>
+
+            <div class="section-toggle" onclick="toggleSection(this, 'abstract-section')">
+                <span>📄 Resumen / Abstract</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div id="abstract-section" class="section-content">
+                <div class="form-group">
+                    <label>Resumen (español)</label>
+                    <textarea name="abstract_es" id="abstract_es" rows="6"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Abstract (inglés)</label>
+                    <textarea name="abstract_en" id="abstract_en" rows="6"></textarea>
+                </div>
+            </div>
+
+            <div class="section-toggle" onclick="toggleSection(this, 'keywords-section')">
+                <span>🏷️ Palabras clave / Keywords</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div id="keywords-section" class="section-content">
+                <div class="form-group">
+                    <label>Palabras clave (separadas por coma)</label>
+                    <input type="text" name="keywords_es" id="keywords_es" placeholder="ej: Desarrollo social, sostenibilidad, servicios públicos">
+                </div>
+                <div class="form-group">
+                    <label>Keywords (separadas por coma)</label>
+                    <input type="text" name="keywords_en" id="keywords_en" placeholder="ej: Social development, sustainability, public services">
+                </div>
+            </div>
+
+            <div class="section-toggle" onclick="toggleSection(this, 'authors-section')">
+                <span>✍️ Autores</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div id="authors-section" class="section-content">
+                <p class="help-text mb-10">Ingresa los datos de cada autor.</p>
+                <input type="hidden" name="authors_count" id="authors_count" value="0">
+                <div id="authors-container"></div>
+                <button type="button" class="add-btn" onclick="addAuthor()">+ Agregar autor</button>
+            </div>
+
+            <div class="section-toggle" onclick="toggleSection(this, 'affiliations-section')">
+                <span>🏛️ Afiliaciones</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div id="affiliations-section" class="section-content">
+                <p class="help-text mb-10">Ingresa las afiliaciones institucionales.</p>
+                <input type="hidden" name="aff_count" id="aff_count" value="0">
+                <div id="affiliations-container"></div>
+                <button type="button" class="add-btn" onclick="addAffiliation()">+ Agregar afiliación</button>
+            </div>
+
+            <div class="section-toggle" onclick="toggleSection(this, 'references-section')">
+                <span>📚 Referencias</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div id="references-section" class="section-content">
+                <p class="help-text mb-10">Ingresa cada referencia en formato de cita mixta.</p>
+                <div id="references-container"></div>
+                <button type="button" class="add-btn" onclick="addReference()">+ Agregar referencia</button>
+            </div>
+
+            <div class="text-center mt-20">
+                <button type="submit" class="btn btn-success" id="generateBtn" style="font-size:18px;padding:15px 40px;">
+                    ⚡ Generar XML
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div id="result-section" class="card">
+        <h2>3. XML Generado</h2>
+        <div class="xml-preview" id="xmlPreview"></div>
+        <div class="action-buttons">
+            <a id="downloadBtn" class="btn btn-primary" download>⬇ Descargar XML</a>
+            <button class="btn btn-secondary" onclick="resetAll()">🔄 Nuevo archivo</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let authorCount = 0;
+let affCount = 0;
+let refCount = 0;
+
+document.getElementById('fileInput').addEventListener('change', function(e) {
+    if (this.files.length > 0) {
+        uploadFile(this.files[0]);
+    }
+});
+
+const uploadArea = document.getElementById('uploadArea');
+uploadArea.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    this.classList.add('dragover');
+});
+uploadArea.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    this.classList.remove('dragover');
+});
+uploadArea.addEventListener('drop', function(e) {
+    e.preventDefault();
+    this.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) {
+        document.getElementById('fileInput').files = e.dataTransfer.files;
+        uploadFile(e.dataTransfer.files[0]);
+    }
+});
+
+function toggleSection(el, sectionId) {
+    el.classList.toggle('active');
+    document.getElementById(sectionId).classList.toggle('show');
+}
+
+function showLoading(text) {
+    document.getElementById('loadingOverlay').classList.add('show');
+    document.querySelector('.loading-text').textContent = text || 'Procesando...';
+}
+
+function hideLoading() {
+    document.getElementById('loadingOverlay').classList.remove('show');
+}
+
+async function uploadFile(file) {
+    if (!file.name.toLowerCase().endsWith('.pdf')) {
+        document.getElementById('upload-status').innerHTML = '<div class="alert alert-error">Solo se permiten archivos PDF.</div>';
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    showLoading('Extrayendo texto del PDF...');
+
+    try {
+        const resp = await fetch('/upload', { method: 'POST', body: formData });
+        const data = await resp.json();
+
+        if (data.error) {
+            document.getElementById('upload-status').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+            hideLoading();
+            return;
+        }
+
+        document.getElementById('file_id').value = data.file_id;
+        document.getElementById('body_text').value = data.texto;
+        document.getElementById('title_es').value = data.title_es;
+        if (data.abstract_es) document.getElementById('abstract_es').value = data.abstract_es;
+        if (data.keywords_es) document.getElementById('keywords_es').value = data.keywords_es;
+
+        tryExtractAuthors(data.texto);
+        tryExtractReferences(data.texto);
+
+        document.getElementById('upload-section').classList.add('hidden');
+        document.getElementById('metadata-section').classList.remove('hidden');
+        document.getElementById('metadata-section').scrollIntoView({ behavior: 'smooth' });
+
+        hideLoading();
+    } catch (err) {
+        document.getElementById('upload-status').innerHTML = `<div class="alert alert-error">Error al procesar: ${err.message}</div>`;
+        hideLoading();
+    }
+}
+
+function tryExtractAuthors(texto) {
+    const lines = texto.split('\n');
+    for (let i = 0; i < Math.min(40, lines.length); i++) {
+        const line = lines[i].trim();
+        if (!line || line.length < 8 || line.length > 100) continue;
+        if (line.match(/^(introducci|resumen|abstract|palabras|keywords)/i)) break;
+        if (i < 5) continue;
+        const parts = line.split(/\s{2,}|,\s*/);
+        if (parts.length >= 2 && parts.length <= 4) {
+            for (const p of parts) {
+                const p2 = p.trim();
+                if (p2.match(/^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/) && p2.length > 10) {
+                    addAuthor();
+                    const names = p2.split(/\s+/);
+                    if (names.length >= 2) {
+                        setAuthorField(authorCount, 'surname', names[names.length - 1]);
+                        setAuthorField(authorCount, 'given', names.slice(0, -1).join(' '));
+                    }
+                }
+            }
+        }
+    }
+    if (authorCount === 0) addAuthor();
+}
+
+function tryExtractReferences(texto) {
+    const refPatterns = [
+        /(?:referencias|bibliografía|bibliografia|references)\s*\n([\s\S]*?)$/i,
+        /(?:referencias|bibliografía)[:\s]*\n([\s\S]*?)$/i
+    ];
+    let refSection = '';
+    for (const p of refPatterns) {
+        const m = texto.match(p);
+        if (m) { refSection = m[1]; break; }
+    }
+    if (refSection) {
+        const refs = refSection.split(/\n\s*(?=\[?\d+[\]\.])|(?:\n\n)/).filter(r => r.trim().length > 30);
+        for (const ref of refs.slice(0, 15)) {
+            addReference(ref.trim());
+        }
+    }
+}
+
+function addAuthor() {
+    authorCount++;
+    document.getElementById('authors_count').value = authorCount;
+    const container = document.getElementById('authors-container');
+    const div = document.createElement('div');
+    div.className = 'entry-row';
+    div.id = `author-row-${authorCount}`;
+    div.innerHTML = `
+        <input type="hidden" name="author_name_${authorCount}" id="author_name_${authorCount}">
+        <input type="text" name="author_surname_${authorCount}" id="author_surname_${authorCount}" placeholder="Apellido" style="flex:1">
+        <input type="text" name="author_given_${authorCount}" id="author_given_${authorCount}" placeholder="Nombre(s)" style="flex:1">
+        <input type="text" name="author_orcid_${authorCount}" id="author_orcid_${authorCount}" placeholder="ORCID (opcional)" style="flex:0.8">
+        <input type="text" name="author_email_${authorCount}" id="author_email_${authorCount}" placeholder="Email (opcional)" style="flex:0.8">
+        <input type="text" name="author_aff_${authorCount}" id="author_aff_${authorCount}" placeholder="Afiliación #" style="width:60px" value="1">
+        <button type="button" class="remove-btn" onclick="removeAuthor(${authorCount})">✕</button>
+    `;
+    container.appendChild(div);
+}
+
+function setAuthorField(idx, field, value) {
+    const el = document.getElementById(`author_${field}_${idx}`);
+    if (el) el.value = value;
+}
+
+function removeAuthor(idx) {
+    const el = document.getElementById(`author-row-${idx}`);
+    if (el) el.remove();
+    updateCounts();
+}
+
+function addAffiliation() {
+    affCount++;
+    document.getElementById('aff_count').value = affCount;
+    const container = document.getElementById('affiliations-container');
+    const div = document.createElement('div');
+    div.className = 'entry-row';
+    div.id = `aff-row-${affCount}`;
+    div.innerHTML = `
+        <input type="text" name="aff_text_${affCount}" id="aff_text_${affCount}" placeholder="Afiliación (ej: Universidad de Sonora)" style="flex:2">
+        <input type="text" name="aff_email_${affCount}" id="aff_email_${affCount}" placeholder="Email" style="flex:1">
+        <button type="button" class="remove-btn" onclick="removeAffiliation(${affCount})">✕</button>
+    `;
+    container.appendChild(div);
+}
+
+function removeAffiliation(idx) {
+    const el = document.getElementById(`aff-row-${idx}`);
+    if (el) el.remove();
+    updateCounts();
+}
+
+function addReference(text) {
+    refCount++;
+    document.getElementById('refs_count').value = refCount;
+    const container = document.getElementById('references-container');
+    const div = document.createElement('div');
+    div.className = 'entry-row';
+    div.id = `ref-row-${refCount}`;
+    div.innerHTML = `
+        <input type="text" name="ref_text_${refCount}" id="ref_text_${refCount}" placeholder="Cita completa..." style="flex:3" value="${escapeHtml(text || '')}">
+        <button type="button" class="remove-btn" onclick="removeReference(${refCount})">✕</button>
+    `;
+    container.appendChild(div);
+}
+
+function removeReference(idx) {
+    const el = document.getElementById(`ref-row-${idx}`);
+    if (el) el.remove();
+    updateCounts();
+}
+
+function updateCounts() {
+    const visibleAuthors = document.querySelectorAll('#authors-container .entry-row').length;
+    const visibleAffs = document.querySelectorAll('#affiliations-container .entry-row').length;
+    const visibleRefs = document.querySelectorAll('#references-container .entry-row').length;
+    document.getElementById('authors_count').value = visibleAuthors;
+    document.getElementById('aff_count').value = visibleAffs;
+    document.getElementById('refs_count').value = visibleRefs;
+}
+
+function escapeHtml(text) {
+    return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+document.getElementById('mainForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+
+    showLoading('Generando XML...');
+
+    try {
+        const resp = await fetch('/generate', { method: 'POST', body: formData });
+        const data = await resp.json();
+
+        if (data.error) {
+            alert('Error: ' + data.error);
+            hideLoading();
+            return;
+        }
+
+        const downloadUrl = data.download_url;
+
+        const resp2 = await fetch(downloadUrl);
+        const xmlText = await resp2.text();
+
+        document.getElementById('xmlPreview').textContent = xmlText;
+        document.getElementById('downloadBtn').href = downloadUrl;
+        document.getElementById('metadata-section').classList.add('hidden');
+        document.getElementById('result-section').style.display = 'block';
+        document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+
+        hideLoading();
+    } catch (err) {
+        alert('Error: ' + err.message);
+        hideLoading();
+    }
+});
+
+function resetAll() {
+    document.getElementById('result-section').style.display = 'none';
+    document.getElementById('metadata-section').classList.add('hidden');
+    document.getElementById('upload-section').classList.remove('hidden');
+    document.getElementById('upload-status').innerHTML = '';
+    document.getElementById('mainForm').reset();
+    document.getElementById('fileInput').value = '';
+    document.getElementById('authors-container').innerHTML = '';
+    document.getElementById('affiliations-container').innerHTML = '';
+    document.getElementById('references-container').innerHTML = '';
+    authorCount = 0;
+    affCount = 0;
+    refCount = 0;
+    document.getElementById('authors_count').value = '0';
+    document.getElementById('aff_count').value = '0';
+    document.getElementById('refs_count').value = '0';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

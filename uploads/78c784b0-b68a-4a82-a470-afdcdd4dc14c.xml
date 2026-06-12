@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article
+  PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
+<article article-type="research-article" dtd-version="1.1" specific-use="sps-1.9" xml:lang="es" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<front>
+		<journal-meta>
+			<journal-id journal-id-type="publisher-id">riasf</journal-id>
+			<journal-title-group>
+				<journal-title>Revista de Investigación Académica sin Frontera</journal-title>
+				<abbrev-journal-title abbrev-type="publisher">riasf</abbrev-journal-title>
+			</journal-title-group>
+			<issn pub-type="ppub">2007-8870</issn>
+			<publisher>
+				<publisher-name>Universidad de Sonora</publisher-name>
+			</publisher>
+		</journal-meta>
+
+		<article-meta>
+			<article-id pub-id-type="doi">10.46589/riasf.v1i43.1</article-id>
+			<article-id pub-id-type="other">1</article-id>
+
+			<article-categories>
+				<subj-group subj-group-type="heading">
+					<subject>Artículos</subject>
+				</subj-group>
+			</article-categories>
+
+			<title-group>
+				<article-title>Revista de Investigación Académica sin Frontera</article-title>
+			</title-group>
+
+			<contrib-group>
+				<contrib contrib-type="author">
+					<name>
+						<surname>Buitimea</surname>
+						<surname>Buitimea</surname>
+						<given-names>Félix</given-names>
+					</name>
+					<xref ref-type="aff" rid="aff1"><sup>1</sup></xref>
+				</contrib>
+			</contrib-group>
+
+			<pub-date date-type="pub" publication-format="electronic">
+				<day>30</day>
+				<month>06</month>
+				<year>2025</year>
+			</pub-date>
+
+			<volume>1</volume>
+			<issue>43</issue>
+			<elocation-id>e1</elocation-id>
+
+			<history>
+				<date date-type="received">
+					<day>16</day>
+					<month>03</month>
+					<year>2025</year>
+				</date>
+				<date date-type="accepted">
+					<day>16</day>
+					<month>06</month>
+					<year>2025</year>
+				</date>
+				<date date-type="pub">
+					<day>30</day>
+					<month>06</month>
+					<year>2025</year>
+				</date>
+			</history>
+
+			<permissions>
+				<license license-type="open-access" xlink:href="https://creativecommons.org/licenses/by-nc/4.0/" xml:lang="es">
+					<license-p>Este es un artículo publicado en acceso abierto bajo una licencia Creative Commons.</license-p>
+				</license>
+			</permissions>
+
+			<abstract>
+				<title>Resumen</title>
+				<p>Desde principios del siglo XX, Maslow (1987) comenta que, con el auge de la 
+industrialización, se hizo evidente la importancia de la motivación laboral, Asimismo, 
+comenta que se ha intentado realizar una tipología de cuáles serían las necesidades que 
+posibilitaron la movilización de una persona, se ha planteado que las motivaciones humanas 
+siguen un orden específico. García (2012) confirma que la motivación de los empleados está 
+directamente relacionada con su desempeño laboral. Herzberg (1966) analizó una muestra de 
+1685 trabajadores de distintas disciplinas y niveles directivos esto para tener un panorama 
+amplio sobre la situación. Fischman (2014) comenta que unos de los tipos de motivación 
+sería la transitoria la cual se refiere a la energía que aparece para llevar a cabo una 
+determinada conducta con el objetivo de obtener algún beneficio externo.</p>
+			</abstract>
+
+			<kwd-group xml:lang="es">
+				<title>Palabras clave:</title>
+				<kwd>Conducta</kwd>
+				<kwd>desempeño</kwd>
+				<kwd>directivos</kwd>
+				<kwd>empresas</kwd>
+			</kwd-group>
+
+			<counts>
+				<fig-count count="0"/>
+				<table-count count="0"/>
+				<equation-count count="0"/>
+				<ref-count count="2"/>
+				<page-count count="0"/>
+			</counts>
+		</article-meta>
+	</front>
+
+	<body>
+
+		<sec>
+			<title>Revista</title>
+			<p>de Investigación Académica sin Frontera 
+LA MOTIVACIÓN Y EL DESEMPEÑO LABORAL DE 
+CONTADORES PÚBLICOS EN EL SUR DE SONORA 
+MOTIVATION AND JOB PERFORMANCE OF 
+PUBLIC ACCOUNTANTS IN SOUTHERN SONORA</p>
+
+		<sec>
+			<title>Felix</title>
+			<p>Buitimea Dulce Maria</p>
+
+		<sec>
+			<title>Publicado:</title>
+			<p>15 de junio 2025</p>
+
+		<sec>
+			<title>Identificador</title>
+			<p>DOI:  https://doi.org/10.46589/riasf.v1i43.786</p>
+
+		<sec>
+			<title>Como</title>
+			<p>citar: 
+Félix Buitimea, D. (2025). LA MOTIVACIÓN Y EL DESEMPEÑO LABORAL DE 
+CONTADORES PÚBLICOS EN EL SUR DE SONORA. Revista De Investigación 
+Académica Sin Frontera: Facultad Interdisciplinaria De Ciencias Económicas 
+Administrativas - Departamento De Ciencias Económico Administrativas-Campus 
+Navojoa, 1(43). https://doi.org/10.46589/riasf.v1i43.786</p>
+
+		<sec>
+			<title>Resumen</title>
+			<p>Desde principios del siglo XX, Maslow (1987) comenta que, con el auge de la 
+industrialización, se hizo evidente la importancia de la motivación laboral, Asimismo, 
+comenta que se ha intentado realizar una tipología de cuáles serían las necesidades que 
+posibilitaron la movilización de una persona, se ha planteado que las motivaciones humanas 
+siguen un orden específico. García (2012) confirma que la motivación de los empleados está 
+directamente relacionada con su desempeño laboral. Herzberg (1966) analizó una muestra de 
+1685 trabajadores de distintas disciplinas y niveles directivos esto para tener un panorama 
+amplio sobre la situación. Fischman (2014) comenta que unos de los tipos de motivación 
+sería la transitoria la cual se refiere a la energía que aparece para llevar a cabo una 
+determinada conducta con el objetivo de obtener algún beneficio externo. 
+Palabras clave: Conducta, desempeño, directivos, empresas 
+Abstract</p>
+
+		<sec>
+			<title>Since</title>
+			<p>the beginning of the 20th century, Maslow (1987) comments that, with the rise of 
+industrialization, the importance of work motivation became evident. Likewise, he comments 
+that an attempt has been made to create a typology of what would be the needs that made the 
+mobilization of a person possible, it has been proposed that human motivations follow a 
+specific order. García (2012) confirms that employee motivation is directly related to their 
+job performance. Herzberg (1966) analyzed a sample of 1,685 workers from different 
+disciplines and management levels in order to have a broad overview of the situation. 
+Fischmann (2014) comments that one of the types of motivation would be the transitory one, 
+which refers to the energy that appears to carry out a certain behavior with the objective of 
+obtaining some external benefit. 
+Key words: Behavior, performance, managers, companies.</p>
+
+		<sec sec-type="intro">
+			<title>Introducción</title>
+			<p>Desde principios del siglo XX, Maslow (1987) comenta que, con el auge de la 
+industrialización, se hizo evidente la importancia de la motivación laboral, las teorías 
+desarrolladas a lo largo del siglo exploraron cómo factores como las condiciones de trabajo 
+y el reconocimiento influyen en el rendimiento y la satisfacción de los empleados, este 
+conocimiento fue fundamental para el establecimiento de leyes laborales y la creación de 
+organizaciones como la OIT. Asimismo, comenta que se ha intentado realizar una tipología 
+de cuáles serían las necesidades que posibilitaron la movilización de una persona, se ha 
+planteado que las motivaciones humanas siguen un orden específico. Nuestras necesidades 
+más básicas, como la alimentación y la seguridad, deben satisfacerse antes de que podamos 
+enfocarnos en otras más complejas, como el reconocimiento social, el afecto o el desarrollo 
+personal. 
+En este sentido, García (2012) confirma que la motivación de los empleados está 
+directamente relacionada con su desempeño laboral. Las organizaciones que logran mantener 
+a sus empleados motivados tienen mayores probabilidades de alcanzar sus objetivos y 
+obtener mejores resultados. Asimismo, Herzberg (1966) analizó una muestra de 1685 
+trabajadores de distintas disciplinas y niveles directivos esto para tener un panorama amplio</p>
+
+		<sec>
+			<title>sobre</title>
+			<p>la situación, se basa en fijar dos tipos de factores sobre la motivación los cuales son  
+factores higiénicos o ergonómicos, que son aquellos que evitan el descontento y este a su vez 
+es relacionado con el entorno del trabajo, estatus, seguridad, salario etc, concluyendo que los 
+factores que contribuyen son distintos e independientes a la variable que provoca 
+insatisfacción.  
+En torno al tema Sum (2015) comenta que la motivación es aquella que afirma los 
+impulsos de un individuo causados por estímulos que provienen externamente o internamente 
+y afirma que la forma de cómo se puede motivar a una persona no es la misma para todos, ya 
+que cada individuo tiene distintas necesidades, preferencias, creencias, valores y muchas 
+otras que influyen en el desempeño laboral. De igual manera, Ramírez (2015) afirma que los 
+procesos de motivación son esenciales para que un colaborador  se sienta satisfecho y útil  en 
+su lugar de trabajo. Ya que a su vez  este puede brindar mejores  beneficios a la organización 
+y así optimizar  sus procesos y la reducción en tiempo al reclutar personal, de esta manera 
+los recursos pueden ser utilizados para la motivación, permitiendo además tener fidelizados 
+a los colaboradores. 
+La motivación es la fuerza interna que nos lleva a dar lo mejor de nosotros mismos. 
+Al sentirnos motivados, aumenta nuestra capacidad para superar obstáculos, aprender cosas 
+nuevas y alcanzar el éxito. Es un escudo contra la depresión y un pilar fundamental para 
+nuestro desarrollo personal y laboral 
+Por su parte Fischman (2014) comenta que unos de los tipos de motivación sería la 
+transitoria  la cual se refiere a la energía que aparece para llevar a cabo una determinada 
+conducta con el objetivo de obtener algún beneficio externo. Por tal motivo González Sáenz 
+(2018) hace mención de que cuando hacemos referencia a la motivación extrínseca hablamos 
+de diferentes estímulos que nos impulsan a actuar ante diversas situaciones de actividades 
+que realizamos.  
+En este sentido, lo que nos motiva en realidad son las recompensas externas que 
+obtenemos al lograr el objetivo, como pueden ser el dinero o el reconocimiento público. Por 
+lo tanto, la motivación extrínseca es un término poco conocido sin embargo es algo que nos 
+sucede a cada persona de manera diaria ya que esta se refiere a la manera en que manejamos 
+nuestras energías y conductas, pues es la que nos une e impulsa a actuar ante diferentes</p>
+
+		<sec>
+			<title>situaciones.</title>
+			<p>A su vez, Fischman (2014) menciona que la motivación extrínseca, en este tipo 
+de motivación el impulso que sentimos para realizar alguna  actividad de nuestro interior y 
+no de alguna recompensa externa. Está muy relacionada con nuestro crecimiento personal y 
+nuestra autorrealización. En este caso, sentimos placer y satisfacción en el proceso de estar 
+realizando aquella actividad y no únicamente cuando ésta termina. 
+Por su parte González Sáenz (2018), menciona la motivación negativa como lo 
+contrario motivación positiva, ya que esta aparece mucho cuando nos motivan para realizar 
+alguna actividad para evitar consecuencias desagradables como un castigo o humillaciones 
+de supervisores o de cualquier persona. Así se llega a la conclusión de que la  motivación 
+negativa es el proceso por el cual un individuo suele pasar cuando mantiene una conducta 
+que no es adecuada, se entiende como la negación que pone ante cualquier situación con el 
+fin de no ser herido y/o amonestado por la situación en la cual se esté viendo involucrado. 
+Método 
+El presente estudio es de enfoque cuantitativo es de diseño no experimental transversal, ya 
+que el mismo se realizó sin la manipulación deliberada de las variables y solo se observan 
+los fenómenos en su ambiente natural para luego analizarlos. 
+El estudio se realizó en dos empresas las cuales están ubicadas al Sur de Sonora, 
+dentro de las cuales la encuesta será dirigida al personal de supervisores y operativos de la 
+empresa para conocer si aplican estrategias motivacionales en ellos y para saber si se sienten 
+motivados a seguir laborando en dicha organización. Para llevar a cabo la recolección de 
+información la técnica de investigación que se seleccionó es la de campo dentro de la cual se 
+utilizará una encuesta en el cual incluye 17 preguntas, dicho cuestionario fue tomado de 
+Cubas Medina (2016) para medir la motivación y rendimiento laboral la cual consta de 20 
+preguntas y son en escala de Likert, la cual fue adaptada de acuerdo al tema, esta y adaptado 
+de acuerdo al tema de implementación de estrategias motivacionales. 
+Para el el análisis de fiabilidad y confiabilidad de los datos se utilizó el método de 
+Alfa de Cronbach el cual arrojó puntos significativos de .756 que según Gámez (2010) es un 
+valor confiable ya que está muy cerca del 1 como dato.</p>
+
+		<sec>
+			<title>Fuente.</title>
+			<p>Elaboración 
+propia.</p>
+
+		<sec sec-type="results">
+			<title>Resultados</title>
+			<p>Con base a los resultados obtenidos dentro de los datos demográficos se resalta que el 52.9% 
+de los encuestados son mujeres y el 47.1% son hombres, con un rango de edades el 43.1% 
+entre 18-25 años, 29.4% entre 26- 35 años, 25.5% entre 36-46 años y por último el 2% con 
+edades de 46 o más.</p>
+
+		<sec>
+			<title>Fuente:</title>
+			<p>Elaboración 
+propia</p>
+
+		<sec>
+			<title>En</title>
+			<p>la siguiente tabla se puede observar los resultados de un total de 51 personas encuestadas       
+los cuales se dividieron de la siguiente manera. El 11.8% de los encuestados demostró tener 
+una autoestima muy bajo, mientras que el 43.1% es bajo, el 27.5% es muy alto y el 17.6 muy 
+alto.</p>
+
+		<sec>
+			<title>Estadísticas</title>
+			<p>de fiabilidad 
+Alfa de 
+Cronbach 
+N de 
+elementos 
+    .756 
+18 
+Tabla 1. MOTIVACIÓN</p>
+
+		<sec>
+			<title>Frecuencia</title>
+			<p>Porcentaje</p>
+
+		<sec>
+			<title>Muy</title>
+			<p>bajo 
+6 
+11.8 
+Bajo 
+22 
+43.1 
+Alto 
+14 
+27.5 
+Muy alto 
+9 
+17.6 
+Total 
+51 
+100.0 
+Tabla 2. RENDIMIENTO LABORAL</p>
+
+		<sec>
+			<title>Frecuencia</title>
+			<p>Porcentaje</p>
+
+		<sec>
+			<title>Fuente:</title>
+			<p>Elaboración propia</p>
+
+		<sec>
+			<title>En</title>
+			<p>la siguiente tabla se puede apreciar de qué manera se dividieron los porcentajes sobre las 
+encuestas aplicadas para medir el nivel de rendimiento laboral, el cual consiste de la siguiente 
+manera, con el 15.7% de los encuestados arrojos que está en un nivel muy bajo en su 
+rendimiento laboral, el 41.2% se encuentra en el nivel bajo, mientras que el nivel alto arrojo 
+un 31.4% y por último el nivel más alto de motivación es representado por el 11.8%.</p>
+
+		<sec>
+			<title>Fuente:</title>
+			<p>Elaboración propia 
+En la tabla anterior se puede ver que el indicador arroja que el género en el masculino 
+predomina ya que la motivación es baja ya que de 24 hombres encuestados 11 arrojan que su 
+motivación está por debajo del rango normal. Mientras que en el género femenino el rango 
+de motivación se encuentra dividido ya que de 27 personas encuestadas se obtuvo a 4 con 
+motivación muy baja ,11 con baja motivación y 10 con una motivación alta. Llegando a la 
+conclusión que en el género masculino es donde la motivación se encuentra más baja. 
+Muy 
+bajo 
+8 
+15.7 
+Bajo 
+21 
+41.2 
+Alto 
+16 
+31.4 
+Muy 
+alto 
+6 
+11.8 
+Total 
+51 
+100.0</p>
+
+		<sec>
+			<title>Tabla</title>
+			<p>3.- MOTIVACIÓN SEGÚN GÉNERO 
+MOTIVACIÓN 
+Total 
+Muy bajo Bajo 
+Alto 
+Muy alto 
+Genero Masculino 4 
+11 
+4 
+5 
+24 
+Femenino 2 
+11 
+10 
+4 
+27 
+Total 
+6 
+22 
+14 
+9 
+51</p>
+
+		<sec>
+			<title>Fuente:</title>
+			<p>Elaboración propia</p>
+
+		<sec>
+			<title>En</title>
+			<p>la siguiente tabla se puede apreciar que el nivel de estudios de secundaria solo 1 
+persona de un total de 5 con ese nivel de estudios se encuentra en su nivel máximo de 
+motivación mientras que 4 están en un nivel bajo. En nivel de estudios de preparatoria 2 
+personas de un total de 18 encuestadas se encuentra en un nivel muy bajo, mientras que 6 
+personas arrojaron que están en un nivel bajo, así las otras 10 personas restantes se encuentran 
+en un nivel alto de motivación. Se puede apreciar que, en el nivel de licenciatura de las 27 
+personas encuestadas en ese rango, 4 de ellas están en un nivel muy bajo, 11 en el nivel bajo, 
+9 en un nivel alto y 3 en niveles muy altos de motivación. Mientras que la única persona 
+encuestada de posgrado tiene su nivel de motivación bajo.</p>
+
+		<sec>
+			<title>Tabla</title>
+			<p>5.- Edad y motivación</p>
+
+		<sec>
+			<title>Total</title>
+			<p>Muy bajo Bajo 
+Alto 
+Muy alto 
+Edad 18- 25 
+3 
+8 
+9 
+2 
+22 
+26-35 
+2 
+9 
+2 
+2 
+15 
+36-45 
+1 
+5 
+3 
+4 
+13 
+46 o más 0 
+0 
+0 
+1 
+1 
+Total 
+6 
+22 
+14 
+9 
+51 
+Fuente: elaboración propia 
+Tabla 4.- Nivel de estudios y motivación 
+MOTIVACIÓN (Agrupada) 
+Total 
+Muy bajo Bajo 
+Alto 
+Muy alto 
+Nivel de estudios Secundaria 
+0 
+4 
+0 
+1 
+5 
+Preparatoria 2 
+6 
+5 
+5 
+18 
+Licenciatura 4 
+11 
+9 
+3 
+27 
+Posgrado 
+0 
+1 
+0 
+0 
+1 
+Total 
+6 
+22 
+14 
+9 
+51</p>
+
+		<sec>
+			<title>Como</title>
+			<p>se puede apreciar en la siguiente tabla en el rango de edad entre 18-25 años se 
+obtuvo el resultado de 9 personas motivadas de 22 encuestadas con esa edad. También se 
+puede apreciar que en dicho rango se encuentran a 8 personas con una motivación baja y 3 
+con muy baja. Mientras que en las personas de 26-35 es el nivel con motivación más bajo 
+con un resultado de 9 personas de 15 encuestadas las que indican una motivación baja 
+mientras que solo 2 arrojaron que se encuentran motivadas y las otras 2 con el nivel de 
+motivación muy bajo. Por lo tanto, en las personas de 36- 45 solo 5 personas de 13 
+encuestadas en esa edad arrojo que se encuentran con una motivación baja y solo 3 con 
+motivación alta y 1 persona con un nivel muy bajo. Así como la única persona encuestada 
+con la edad de 46 o más se encuentra en su nivel de motivación alto.</p>
+
+		<sec>
+			<title>Tabla</title>
+			<p>6.- Edad y rendimiento laboral</p>
+
+		<sec>
+			<title>Total</title>
+			<p>Muy bajo Bajo 
+Alto 
+Muy alto 
+Edad 18- 25 
+4 
+11 
+5 
+2 
+22 
+26-35 
+1 
+6 
+6 
+2 
+15 
+36-45 
+3 
+4 
+4 
+2 
+13 
+46 o más 0 
+0 
+1 
+0 
+1 
+Total 
+8 
+21 
+16 
+6 
+51 
+Fuente: elaboración propia</p>
+
+		<sec>
+			<title>En</title>
+			<p>esta tabla se observar que, de un total de 51 encuestados, la edad entre los 18-25 
+años tiene un índice de rendimiento laboral muy bajo, mientras que en la edad de 26-35 los 
+resultados están a la par ya que como se puede mostrar la mitad de los encuestados en esa 
+categoría se sienten con un nivel alto de motivación y la otra mitad con el nivel bajo. 
+En el rango de 36-45 años se puede apreciar que 3 personas están con nivel muy bajo, 
+4 nivel bajo y 4 con nivel alto de rendimiento laboral. Mientras que en la edad de 46 o más 
+se encuentra en su nivel alto de motivación.</p>
+
+		<sec>
+			<title>Correlaciones</title>
+
+		<sec>
+			<title>Fuente:</title>
+			<p>elaboración propia 
+**. La correlación es significativa en el nivel 0,01 (bilateral). 
+El coeficiente de correlación Pearson es el indicador que determinar si el valor 
+obtenido de la muestra está relacionado entre sí, como se puede apreciar en la tabla la 
+motivación y el rendimiento no existe una correlación fuerte ya que para que esto sea suceda 
+el indicador deberá ser cercano a 1, y resulto tener un indicador de .381 el cual es indica una 
+correlación baja.</p>
+
+		<sec sec-type="conclusions">
+			<title>Conclusiones</title>
+			<p>Con base a los resultados obtenidos se concluyó que impacto de la motivación en el 
+rendimiento laboral de personal en empresas del sur de sonora, es de suma importancia ya 
+que se comprobó que el hacer uso de estrategias para motivar a los trabajadores ayuda a tener 
+un mejor clima de trabajo, además de favorecer a la organización ya que todo trabajador 
+motivado por ende realizara un buen trabajo.  
+Los resultados obtenidos se contrastan con lo que dijo Orozco, B. (2013) el cual 
+explica todos los factores que pueden llegar a existir entre la motivación y el rendimiento 
+laboral. Con los resultados de la encuesta aplicada pudimos llegar a confirmar también las 
+MOTIVACI
+ÓN 
+(Agrupada) 
+RENDIMIEN
+TOLABORA
+L (Agrupada) 
+MOTIVACIÓN 
+(Agrupada) 
+Correlación 
+de 
+Pearson 
+1 
+.381** 
+Sig. (bilateral) 
+.006 
+N 
+51 
+51</p>
+
+		<sec>
+			<title>teorías</title>
+			<p>de Maslow (1987) el cual nos dice que las necesidades básicas se ordenan según la 
+jerarquía de necesidades de tal manera que unas son más prioritarias que otras, tal como la 
+necesidad fisiológica ya que los humanos necesitan seguridad, amor, estima y alimento. la 
+necesidad de seguridad, estima, amor y de autorrealización. 
+También podemos comprender como es que la motivación laboral es un aspecto que 
+jamás debería faltar entre los empleados. Ya que es genera un cambio cualitativo a la hora de 
+llevar a cabo un trabajo, pero funciona para mantener un clima laboral más empático, 
+agradable y proactivo 
+Uno de los beneficios que debe ser importante de la motivación laboral es el 
+compromiso, ya que teniendo empleados motivados es llevara a que estos realicen sus labores 
+más comprometidos y con ganas de sumar a la organización a la que pertenecen. Aunque 
+muchas veces la motivación dentro de las empresas no siempre es la adecuada o no está a los 
+niveles esperados.</p>
+
+		<sec sec-type="discussion">
+			<title>Discusión</title>
+			<p>La motivación es uno de los pilares que mueve a todo ser humano, este provoca ciertos 
+cambios en la vida personas y profesional de todo trabajador. Después de ver los resultados 
+de la encuesta aplicadas se coincide con la hipótesis del autor Maslow (1987) el cual dice 
+que la motivación es aquella que influye en el rendimiento laboral de los trabajadores de las 
+empresas.</p>
+
+		<sec>
+			<title>En</title>
+			<p>el objetivo específico -  donde se pide determinar el grado de motivación del 
+personal de las empresas de Navojoa sonora.  
+El 60.8% de los empleados dicen estar de acuerdo con el beneficio económico que reciben 
+por su labor en la empresa, lo cual nos expresa que con los beneficios económicos generan 
+una influenza como factor motivante en toda persona y así realizar sus labores 
+satisfactoriamente.</p>
+
+		<sec>
+			<title>El</title>
+			<p>54.9% de los empleados de las empresas encuestadas dicen sentirse motivados con 
+el sueldo que reciben, esto nos afirma el salario es otro factor fundamental para la motivación</p>
+
+		<sec>
+			<title>de</title>
+			<p>cada trabajador ya que con eso sienten más valorado su trabajo. 
+El 64.7% de los empleados reconoce que realiza su labor dentro de la empresa por rutina no 
+porque le guste el área donde se encuentre o la actividad que realiza.</p>
+
+		<sec>
+			<title>Con</title>
+			<p>los resultados anteriormente mencionados confirman las palabras de García 
+(2012) el cual indica que la motivación de un trabajador puede iniciar con compensaciones 
+económicas para cubrir ciertas necesidades personales, hasta buscar el prestigio social o 
+reconocimiento público.</p>
+
+		<sec>
+			<title>Siempre</title>
+			<p>se debe tomar en cuenta las características personales de cada trabajador al 
+momento de buscar una manera de motivarlo, podría tomarse en cuenta sus valores, su nivel 
+cultural, la situación económica o cualquier otro objetivo que dicho trabajador desee en ese 
+momento para satisfacer sus emociones.</p>
+
+		<sec>
+			<title>También</title>
+			<p>el autor Tejedor (2014). Coincide en que la motivación es aquella conducta 
+humana la cual es orientada con influencia de reconocimientos económicos o emocionales. 
+Lo cual se comprueba después de analizar los resultados aplicados a los empleados de 2 
+empresas ubicadas en el sur de sonora. Ya que aplicando medidas motivacionales eso hace 
+que los factores favorezcan los intereses de la empresa y así poder alcanzar sus objetivos 
+empresariales. 
+Bibliografia 
+Altamirano, A., &amp; Criss, L. (2015). Implementación de un plan de estrategias motivacionales 
+para potenciar el desempeño laboral del talento humano de la Empresa de Negocios 
+Valdivieso Saona SAC 2014.</p>
+
+		<sec>
+			<title>Ames,</title>
+			<p>T., &amp; Jandery, X. (2017). La motivación y su relación con el desempeño laboral de 
+los trabajadores de los restaurantes del distrito de Chancay-sector-Panamericana, año 2017.</p>
+
+		<sec>
+			<title>Bustos,</title>
+			<p>A. (1991). El mal rendimiento académico y la indisciplina de los alumnos desde la 
+perspectiva de la teoría motivacional de Maslow. Revista de Orientación Educacional, (8), 
+15-21.</p>
+
+		<sec>
+			<title>Cubas</title>
+			<p>Medina, N. R. (2016). La motivación y su influencia en el rendimiento laboral del 
+personal en la IE-ADEU Deportivo SAC-chiclayo.</p>
+
+		<sec>
+			<title>Escuela</title>
+			<p>del Partido «Ñico López». Maestría en Consultoría Gerencial. Curso 2. Cultura 
+organizacional. La Habana: Escuela del Partido «Ñico López»</p>
+
+		<sec>
+			<title>García</title>
+			<p>Sanz, V. (2012). La motivación laboral, estudio descriptivo de algunas variables. 
+González Esquivel, D. A. (2002). Motivación laboral (Doctoral dissertation, Universidad 
+Autónoma de Nuevo León)</p>
+
+		<sec>
+			<title>Garza</title>
+			<p>Leal, A. (2000). Estrategias motivacionales para el personal de la empresa.</p>
+
+		<sec>
+			<title>Garrido</title>
+			<p>Asenjo, F. J. (2018). Estrategias motivacionales y clima organizacional en el 
+personal asistencial de la Microred de salud Putuyakat de la provincia de Condorcanqui-
+2016.</p>
+
+		<sec>
+			<title>Maslow,</title>
+			<p>A., &amp; Maslow, P. A. (2015). La motivación. Trabajo, 23(06).</p>
+
+		<sec>
+			<title>Posada,</title>
+			<p>J. A. S., &amp; Soria, M. S. (2014). Satisfacción laboral: el camino entre el crecimiento 
+psicológico y el desempeño laboral en empresas colombianas industriales y de servicios. 
+Universitos Psychologica, 13(1).</p>
+
+		<sec>
+			<title>Quintero,</title>
+			<p>N., Africano, N., &amp; Faría, E. (2008). Clima organizacional y desempeño laboral 
+del personal empresa vigilantes asociados costa oriental del lago. Negotium, 3(9), 33-51.</p>
+
+		<sec>
+			<title>Montejo,</title>
+			<p>A. P. (2001). Evaluación del desempeño laboral. Gestión, 2(9).</p>
+
+		<sec>
+			<title>Salazar</title>
+			<p>Estrada, J. G., Guerrero Pupo, J. C., Machado Rodríguez, Y. B., &amp; Cañedo Andalia, 
+R. (2009). Clima y cultura organizacional: dos componentes esenciales en la productividad 
+laboral. Acimed, 20(4), 67-75</p>
+
+	</body>
+
+	<back>
+		<ref-list>
+			<title>Referencias</title>
+
+			<ref id="B1">
+				<mixed-citation>Altamirano, A., &amp; Criss, L. (2015). Implementación de un plan de estrategias motivacionales para potenciar el desempeño laboral del talento humano de la Empresa de Negocios Valdivieso Saona SAC 2014.  Ames, T., &amp; Jandery, X. (2017). La motivación y su relación con el desempeño laboral de los trabajadores de los restaurantes del distrito de Chancay-sector-Panamericana, año 2017.  Bustos, A. (1991). El mal rendimiento académico y la indisciplina de los alumnos desde la perspectiva de la teoría motivacional de Maslow. Revista de Orientación Educacional, (8), 15-21.      Cubas Medina, N. R. (2016). La motivación y su influencia en el rendimiento laboral del personal en la IE-ADEU Deportivo SAC-chiclayo.  Escuela del Partido «Ñico López». Maestría en Consultoría Gerencial. Curso 2. Cultura organizacional. La Habana: Escuela del Partido «Ñico López»  García Sanz, V. (2012). La motivación laboral, estudio descriptivo de algunas variables. González Esquivel, D. A. (2002). Motivación laboral (Doctoral dissertation, Universidad Autónoma de Nuevo León)  Garza Leal, A. (2000). Estrategias motivacionales para el personal de la empresa.  Garrido Asenjo, F. J. (2018). Estrategias motivacionales y clima organizacional en el personal asistencial de la Microred de salud Putuyakat de la provincia de Condorcanqui-</mixed-citation>
+			</ref>
+
+			<ref id="B2">
+				<mixed-citation>2016.  Maslow, A., &amp; Maslow, P. A. (2015). La motivación. Trabajo, 23(06).  Posada, J. A. S., &amp; Soria, M. S. (2014). Satisfacción laboral: el camino entre el crecimiento psicológico y el desempeño laboral en empresas colombianas industriales y de servicios. Universitos Psychologica, 13(1).  Quintero, N., Africano, N., &amp; Faría, E. (2008). Clima organizacional y desempeño laboral del personal empresa vigilantes asociados costa oriental del lago. Negotium, 3(9), 33-51.  Montejo, A. P. (2001). Evaluación del desempeño laboral. Gestión, 2(9).  Salazar Estrada, J. G., Guerrero Pupo, J. C., Machado Rodríguez, Y. B., &amp; Cañedo Andalia, R. (2009). Clima y cultura organizacional: dos componentes esenciales en la productividad laboral. Acimed, 20(4), 67-75</mixed-citation>
+			</ref>
+		</ref-list>
+	</back>
+</article>
