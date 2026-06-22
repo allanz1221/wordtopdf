@@ -214,7 +214,7 @@ def generate_jats_xml(data):
                 xml += f'\t\t\t\t\t\t<surname>{escape_xml(surname)}</surname>\n'
                 xml += f'\t\t\t\t\t\t<given-names>{escape_xml(given)}</given-names>\n'
             xml += '\t\t\t\t\t</name>\n'
-            xml += f'\t\t\t\t\t<xref ref-type="aff" rid="aff{aff_id}"><sup>{aff_id}</sup></xref>\n'
+            xml += f'\t\t\t\t\t<xref ref-type="aff" rid="aff{aff_id}">{aff_id}</xref>\n'
             xml += '\t\t\t\t</contrib>\n'
         xml += '\t\t\t</contrib-group>\n'
 
