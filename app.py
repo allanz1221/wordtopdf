@@ -131,6 +131,33 @@ def guess_authors(text):
             return list(set(possible))[:3]
     return []
 
+def parse_reference(ref_text):
+    year_match = re.search(r'\b(19\d\d|20\d\d)\b', ref_text)
+    year = year_match.group(1) if year_match else ""
+    authors = ""
+    title = ""
+    source = ""
+    if year_match:
+        parts = ref_text.split(year_match.group(0), 1)
+        if len(parts) == 2:
+            authors_part = parts[0].strip(' (.,;')
+            rest = parts[1].strip(' ).,;')
+            authors = authors_part
+            rest_parts = re.split(r'[\.\?]\s+', rest, 1)
+            if len(rest_parts) == 2:
+                title = rest_parts[0].strip()
+                source_part = rest_parts[1].strip()
+                source_match = re.match(r'^([^,]+)', source_part)
+                source = source_match.group(1).strip() if source_match else source_part
+            else:
+                title = rest
+    return {
+        "year": year,
+        "authors": authors,
+        "title": title,
+        "source": source
+    }
+
 def generate_jats_xml(data):
     article_id = data.get('article_id', '1')
     doi = data.get('doi', f'10.46589/riasf.v1i43.{article_id}')
@@ -189,32 +216,30 @@ def generate_jats_xml(data):
             orcid = data.get(f'author_orcid_{i}', '')
             email = data.get(f'author_email_{i}', '')
             aff_id = data.get(f'author_aff_{i}', '1')
-            if not name and not surname:
+            if not name and not surname and not given:
                 continue
             xml += '\t\t\t\t<contrib contrib-type="author">\n'
             if orcid:
                 xml += f'\t\t\t\t\t<contrib-id contrib-id-type="orcid">{escape_xml(orcid)}</contrib-id>\n'
             xml += '\t\t\t\t\t<name>\n'
-            if surname:
+            if surname and given:
                 xml += f'\t\t\t\t\t\t<surname>{escape_xml(surname)}</surname>\n'
-            else:
+                xml += f'\t\t\t\t\t\t<given-names>{escape_xml(given)}</given-names>\n'
+            elif surname:
+                xml += f'\t\t\t\t\t\t<surname>{escape_xml(surname)}</surname>\n'
+            elif given:
+                xml += f'\t\t\t\t\t\t<given-names>{escape_xml(given)}</given-names>\n'
+            elif name:
                 parts = name.strip().split(' ', 1)
                 if len(parts) > 1:
                     xml += f'\t\t\t\t\t\t<surname>{escape_xml(parts[0])}</surname>\n'
                     xml += f'\t\t\t\t\t\t<given-names>{escape_xml(parts[1])}</given-names>\n'
                 else:
                     xml += f'\t\t\t\t\t\t<given-names>{escape_xml(name)}</given-names>\n'
-            if not surname and not given:
-                pass
-            elif surname and given:
-                pass
-            else:
-                pass
-            if given and surname:
-                xml += f'\t\t\t\t\t\t<surname>{escape_xml(surname)}</surname>\n'
-                xml += f'\t\t\t\t\t\t<given-names>{escape_xml(given)}</given-names>\n'
             xml += '\t\t\t\t\t</name>\n'
             xml += f'\t\t\t\t\t<xref ref-type="aff" rid="aff{aff_id}">{aff_id}</xref>\n'
+            if email:
+                xml += f'\t\t\t\t\t<email>{escape_xml(email)}</email>\n'
             xml += '\t\t\t\t</contrib>\n'
         xml += '\t\t\t</contrib-group>\n'
 
@@ -272,11 +297,6 @@ def generate_jats_xml(data):
     xml += f'\t\t\t\t\t<day>{acc_day}</day>\n'
     xml += f'\t\t\t\t\t<month>{acc_month}</month>\n'
     xml += f'\t\t\t\t\t<year>{acc_year}</year>\n'
-    xml += '\t\t\t\t</date>\n'
-    xml += '\t\t\t\t<date date-type="pub">\n'
-    xml += f'\t\t\t\t\t<day>{pub_day}</day>\n'
-    xml += f'\t\t\t\t\t<month>{pub_month}</month>\n'
-    xml += f'\t\t\t\t\t<year>{pub_year}</year>\n'
     xml += '\t\t\t\t</date>\n'
     xml += '\t\t\t</history>\n'
 
@@ -336,74 +356,69 @@ def generate_jats_xml(data):
     xml += '\t<body>\n'
 
     if body_html:
-        body_paragraphs = re.split(r'\n\s*\n', body_html.strip())
-        in_refs = False
-        for para in body_paragraphs:
-            para = para.strip()
-            if not para:
-                continue
+        paragraphs = [p.strip() for p in body_html.split('\n') if p.strip()]
+        sec_open = False
+        for para in paragraphs:
             para_lower = para.lower()
-            if para_lower.startswith('introducción') or para_lower.startswith('introduccion'):
-                xml += '\n\t\t<sec sec-type="intro">\n'
-                xml += '\t\t\t<title>Introducción</title>\n'
-                content = para[12:].strip() if len(para) > 12 else ""
-                if content:
-                    xml += f'\t\t\t<p>{escape_xml(content)}</p>\n'
-                in_refs = False
-            elif para_lower.startswith('metodología') or para_lower.startswith('metodologia') or para_lower.startswith('métodos') or para_lower.startswith('metodos') or para_lower.startswith('material'):
-                xml += '\n\t\t<sec sec-type="methods">\n'
-                xml += '\t\t\t<title>Metodología</title>\n'
-                content = para[11:].strip()
-                if content:
-                    xml += f'\t\t\t<p>{escape_xml(content)}</p>\n'
-            elif para_lower.startswith('resultados'):
-                xml += '\n\t\t<sec sec-type="results">\n'
-                xml += '\t\t\t<title>Resultados</title>\n'
-                content = para[10:].strip()
-                if content:
-                    xml += f'\t\t\t<p>{escape_xml(content)}</p>\n'
-            elif para_lower.startswith('discusión') or para_lower.startswith('discusion'):
-                xml += '\n\t\t<sec sec-type="discussion">\n'
-                xml += '\t\t\t<title>Discusión</title>\n'
-                content = para[9:].strip()
-                if content:
-                    xml += f'\t\t\t<p>{escape_xml(content)}</p>\n'
-            elif para_lower.startswith('conclusiones') or para_lower.startswith('conclusión') or para_lower.startswith('conclusion'):
-                xml += '\n\t\t<sec sec-type="conclusions">\n'
-                xml += '\t\t\t<title>Conclusiones</title>\n'
-                content = para[12:].strip() if para_lower.startswith('conclusiones') else para[10:].strip()
-                if content:
-                    xml += f'\t\t\t<p>{escape_xml(content)}</p>\n'
-            elif para_lower.startswith('justificación') or para_lower.startswith('justificacion'):
-                xml += '\n\t\t<sec>\n'
-                xml += '\t\t\t<title>Justificación</title>\n'
-                content = para[13:].strip() if para_lower.startswith('justificación') else para[12:].strip()
-                if content:
-                    xml += f'\t\t\t<p>{escape_xml(content)}</p>\n'
-            elif para_lower.startswith('objetivos'):
-                xml += '\n\t\t<sec>\n'
-                xml += '\t\t\t<title>Objetivos</title>\n'
-                content = para[9:].strip()
-                if content:
-                    xml += f'\t\t\t<p>{escape_xml(content)}</p>\n'
-            elif para_lower.startswith('referencias') or para_lower.startswith('bibliografía') or para_lower.startswith('bibliografia'):
-                in_refs = True
-            elif in_refs:
-                pass
-            else:
-                xml += f'\n\t\t<sec>\n'
-                first_word = para.split()[0] if para.split() else ""
-                if para_lower.startswith('planteamiento'):
-                    xml += '\t\t\t<title>Planteamiento del problema</title>\n'
-                    content = para[23:].strip()
-                else:
-                    xml += f'\t\t\t<title>{escape_xml(first_word)}</title>\n'
-                    content = para[len(first_word):].strip()
-                if content:
-                    xml += f'\t\t\t<p>{escape_xml(content)}</p>\n'
+            is_heading = False
+            sec_type = None
+            title = ""
 
-        for sec_match in re.finditer(r'</sec>', xml):
-            pass
+            if para_lower.startswith('introducción') or para_lower.startswith('introduccion'):
+                is_heading = True
+                sec_type = 'intro'
+                title = 'Introducción'
+            elif para_lower.startswith('metodología') or para_lower.startswith('metodologia') or para_lower.startswith('métodos') or para_lower.startswith('metodos') or para_lower.startswith('material'):
+                is_heading = True
+                sec_type = 'methods'
+                title = 'Metodología'
+            elif para_lower.startswith('resultados'):
+                is_heading = True
+                sec_type = 'results'
+                title = 'Resultados'
+            elif para_lower.startswith('discusión') or para_lower.startswith('discusion'):
+                is_heading = True
+                sec_type = 'discussion'
+                title = 'Discusión'
+            elif para_lower.startswith('conclusiones') or para_lower.startswith('conclusión') or para_lower.startswith('conclusion'):
+                is_heading = True
+                sec_type = 'conclusions'
+                title = 'Conclusiones'
+            elif para_lower.startswith('justificación') or para_lower.startswith('justificacion'):
+                is_heading = True
+                title = 'Justificación'
+            elif para_lower.startswith('objetivos'):
+                is_heading = True
+                title = 'Objetivos'
+            elif para_lower.startswith('planteamiento'):
+                is_heading = True
+                title = 'Planteamiento del problema'
+            elif para_lower.startswith('referencias') or para_lower.startswith('bibliografía') or para_lower.startswith('bibliografia'):
+                continue
+
+            if is_heading:
+                if sec_open:
+                    xml += '\t\t</sec>\n'
+                if sec_type:
+                    xml += f'\n\t\t<sec sec-type="{sec_type}">\n'
+                else:
+                    xml += '\n\t\t<sec>\n'
+                xml += f'\t\t\t<title>{escape_xml(title)}</title>\n'
+                sec_open = True
+
+                if len(para) > len(title) + 5:
+                    content = re.sub(rf'^{title}[:\s\-\.]*', '', para, flags=re.IGNORECASE).strip()
+                    if content:
+                        xml += f'\t\t\t<p>{escape_xml(content)}</p>\n'
+            else:
+                if not sec_open:
+                    xml += '\n\t\t<sec>\n'
+                    xml += '\t\t\t<title>Introducción</title>\n'
+                    sec_open = True
+                xml += f'\t\t\t<p>{escape_xml(para)}</p>\n'
+
+        if sec_open:
+            xml += '\t\t</sec>\n'
     else:
         xml += '\t\t<sec>\n'
         xml += '\t\t\t<title>Contenido</title>\n'
@@ -420,14 +435,32 @@ def generate_jats_xml(data):
         for i in range(1, refs_count + 1):
             ref_text = data.get(f'ref_text_{i}', '')
             if ref_text:
+                ref_info = parse_reference(ref_text)
                 xml += '\n'
                 xml += f'\t\t\t<ref id="B{i}">\n'
+                xml += f'\t\t\t\t<label>{i}</label>\n'
                 xml += f'\t\t\t\t<mixed-citation>{escape_xml(ref_text)}</mixed-citation>\n'
+                xml += '\t\t\t\t<element-citation publication-type="journal">\n'
+                if ref_info['authors']:
+                    xml += '\t\t\t\t\t<person-group person-group-type="author">\n'
+                    xml += f'\t\t\t\t\t\t<name>\n\t\t\t\t\t\t\t<surname>{escape_xml(ref_info["authors"])}</surname>\n\t\t\t\t\t\t</name>\n'
+                    xml += '\t\t\t\t\t</person-group>\n'
+                if ref_info['title']:
+                    xml += f'\t\t\t\t\t<article-title>{escape_xml(ref_info["title"])}</article-title>\n'
+                if ref_info['source']:
+                    xml += f'\t\t\t\t\t<source>{escape_xml(ref_info["source"])}</source>\n'
+                if ref_info['year']:
+                    xml += f'\t\t\t\t\t<year>{escape_xml(ref_info["year"])}</year>\n'
+                xml += '\t\t\t\t</element-citation>\n'
                 xml += '\t\t\t</ref>\n'
     else:
         xml += '\n'
         xml += '\t\t\t<ref id="B1">\n'
+        xml += '\t\t\t\t<label>1</label>\n'
         xml += '\t\t\t\t<mixed-citation>Referencia 1</mixed-citation>\n'
+        xml += '\t\t\t\t<element-citation publication-type="journal">\n'
+        xml += '\t\t\t\t\t<article-title>Referencia 1</article-title>\n'
+        xml += '\t\t\t\t</element-citation>\n'
         xml += '\t\t\t</ref>\n'
 
     xml += '\t\t</ref-list>\n'
@@ -437,6 +470,8 @@ def generate_jats_xml(data):
     return xml
 
 def escape_xml(text):
+    if not isinstance(text, str):
+        text = str(text or '')
     text = text.replace('&', '&amp;')
     text = text.replace('<', '&lt;')
     text = text.replace('>', '&gt;')
