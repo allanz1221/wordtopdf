@@ -342,7 +342,8 @@ async function uploadFile(file) {
         if (data.abstract_es) document.getElementById('abstract_es').value = data.abstract_es;
         if (data.keywords_es) document.getElementById('keywords_es').value = data.keywords_es;
 
-        tryExtractAuthors(data.texto);
+        // Usar autores detectados por el servidor; si viene vacío, agregar autor por defecto
+        loadAuthors(data.authors || []);
         if (data.references && data.references.length > 0) {
             for (const ref of data.references) {
                 addReference(ref);
@@ -364,29 +365,23 @@ async function uploadFile(file) {
     }
 }
 
-function tryExtractAuthors(texto) {
-    const lines = texto.split('\n');
-    for (let i = 0; i < Math.min(40, lines.length); i++) {
-        const line = lines[i].trim();
-        if (!line || line.length < 8 || line.length > 100) continue;
-        if (line.match(/^(introducci|resumen|abstract|palabras|keywords)/i)) break;
-        if (i < 5) continue;
-        const parts = line.split(/\s{2,}|,\s*/);
-        if (parts.length >= 2 && parts.length <= 4) {
-            for (const p of parts) {
-                const p2 = p.trim();
-                if (p2.match(/^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/) && p2.length > 10) {
-                    addAuthor();
-                    const names = p2.split(/\s+/);
-                    if (names.length >= 2) {
-                        setAuthorField(authorCount, 'surname', names[names.length - 1]);
-                        setAuthorField(authorCount, 'given', names.slice(0, -1).join(' '));
-                    }
-                }
-            }
+/**
+ * Carga autores desde la lista devuelta por el servidor.
+ * Si la lista está vacía, agrega un autor con valores por defecto.
+ */
+function loadAuthors(authors) {
+    if (authors && authors.length > 0) {
+        for (const a of authors) {
+            addAuthor();
+            setAuthorField(authorCount, 'surname', a.surname || '');
+            setAuthorField(authorCount, 'given', a.given || '');
         }
+    } else {
+        // Autor por defecto para que el XML siempre tenga al menos un autor
+        addAuthor();
+        setAuthorField(authorCount, 'surname', 'Apellido');
+        setAuthorField(authorCount, 'given', 'Nombre');
     }
-    if (authorCount === 0) addAuthor();
 }
 
 function tryExtractReferences(texto) {

@@ -28,11 +28,37 @@ def extract_text_from_docx(docx_path):
     text = "\n".join(p.text for p in doc.paragraphs)
     return text
 
+# Palabras que indican que la línea es una cabecera de revista, no el título del artículo
+HEADER_SKIP_PATTERNS = re.compile(
+    r'(revista|journal|issn|vol\.?\s*\d|núm|number|pp\.?\s*\d|doi\s*:|http|universidad de sonora'
+    r'|investigaci[oó]n acad[eé]mica|sin frontera|editorial|editor|published|publicado en)',
+    re.IGNORECASE
+)
+
 def guess_title(text):
     lines = [l.strip() for l in text.strip().split('\n') if l.strip()]
-    for line in lines[:20]:
-        if len(line) > 20 and len(line) < 300:
-            return line
+    candidates = []
+    for line in lines[:40]:
+        if len(line) < 20 or len(line) > 350:
+            continue
+        if HEADER_SKIP_PATTERNS.search(line):
+            continue
+        # Saltar líneas que parecen datos de autoría o institución (contienen @ o son muy cortas)
+        if '@' in line:
+            continue
+        # Evitar líneas que son solo números/fechas
+        if re.match(r'^[\d\s\/\-\.,:]+$', line):
+            continue
+        candidates.append(line)
+    # El título suele ser la línea más larga de los primeros candidatos o la primera válida
+    if candidates:
+        # Preferir candidatos con palabras mayúsculas o que parecen oraciones completas
+        for c in candidates[:5]:
+            # Si tiene más de 4 palabras y no es solo mayúsculas (que sería un encabezado de sección)
+            words = c.split()
+            if len(words) >= 4:
+                return c
+        return candidates[0]
     return ""
 
 def guess_abstract(text):
@@ -118,18 +144,64 @@ def guess_references(text):
     return unique[:20]
 
 def guess_authors(text):
+    """
+    Intenta detectar autores en las primeras líneas del documento.
+    Devuelve lista de dicts con {'surname': ..., 'given': ...}.
+    Si no detecta nada, devuelve un autor por defecto.
+    """
+    # Patron: línea que contiene solo nombres propios (2-5 palabras capitalizadas)
+    # típicamente entre la línea 3 y 25 del documento
+    name_pattern = re.compile(
+        r'^([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,4})$'
+    )
+    # Palabras que indican que no es un autor
+    skip_words = re.compile(
+        r'(revista|journal|resumen|abstract|introduc|metodolog|resultado|conclus|referenc'
+        r'|universidad|instituto|departamento|palabras\s+clave|keywords|issn|vol|http|doi)',
+        re.IGNORECASE
+    )
+    authors = []
     lines = text.strip().split('\n')
-    for i, line in enumerate(lines[:30]):
+    for line in lines[2:40]:   # Saltar la primera línea (suele ser el título)
         line_clean = line.strip()
-        if re.search(r'Clark.*Valenzuela|Zayas.*Campas|autor|author', line_clean, re.IGNORECASE):
+        if not line_clean or len(line_clean) < 6 or len(line_clean) > 120:
             continue
-        if re.match(r'^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,4}$', line_clean) and len(line_clean) < 80:
-            if i > 0 and len(line_clean) > 10:
+        if skip_words.search(line_clean):
+            continue
+        if '@' in line_clean:   # Email → probablemente línea de autor
+            continue
+        m = name_pattern.match(line_clean)
+        if m:
+            full = m.group(1).strip()
+            parts = full.rsplit(' ', 1)   # Separar apellido (último) y nombre
+            if len(parts) == 2:
+                authors.append({'given': parts[0], 'surname': parts[1]})
+            else:
+                authors.append({'given': '', 'surname': full})
+            if len(authors) >= 5:
+                break
+
+    # Fallback: buscar con regex en las primeras 2000 chars
+    if not authors:
+        possible = re.findall(
+            r'(?:^|\n)[ \t]*([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3})[ \t]*(?:\n|$)',
+            text[:2500], re.MULTILINE
+        )
+        seen = set()
+        for p in possible:
+            p = p.strip()
+            if p in seen or skip_words.search(p):
                 continue
-        possible = re.findall(r'([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3}(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)?)', text[:2000])
-        if possible:
-            return list(set(possible))[:3]
-    return []
+            seen.add(p)
+            parts = p.rsplit(' ', 1)
+            if len(parts) == 2:
+                authors.append({'given': parts[0], 'surname': parts[1]})
+            else:
+                authors.append({'given': '', 'surname': p})
+            if len(authors) >= 3:
+                break
+
+    return authors  # Puede ser lista vacía; el front-end pondrá el default
 
 def parse_reference(ref_text):
     year_match = re.search(r'\b(19\d\d|20\d\d)\b', ref_text)
@@ -172,8 +244,8 @@ def generate_jats_xml(data):
     refs_count = int(data.get('refs_count', '0'))
 
     xml = '<?xml version="1.0" encoding="utf-8"?>\n'
-    xml += '<!DOCTYPE article\n'
-    xml += '  PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "https://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">\n'
+    # NOTA: No se incluye <!DOCTYPE> para evitar que OJS3 intente resolver el DTD
+    # externo en línea, lo que causa que el galley se muestre en blanco.
     xml += '<article article-type="research-article" dtd-version="1.1" specific-use="sps-1.9" xml:lang="es" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">\n'
     xml += '\t<front>\n'
     xml += '\t\t<journal-meta>\n'
@@ -525,6 +597,8 @@ def upload():
     m = re.match(r'^(\d+)', base)
     original_name = m.group(1) if m else base
 
+    authors = guess_authors(texto)
+
     return jsonify({
         'file_id': file_id,
         'texto': texto[:50000],
@@ -532,6 +606,7 @@ def upload():
         'abstract_es': abstract,
         'keywords_es': ', '.join(keywords),
         'references': refs,
+        'authors': authors,
         'original_name': original_name,
         'total_lines': total_lines
     })
